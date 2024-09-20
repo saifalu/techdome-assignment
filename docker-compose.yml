@@ -1,0 +1,40 @@
+version: '3'
+services:
+  backend:
+    image: saif8957/techdome-backend:latest
+    container_name: techdome-backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    environment:
+      - MONGO_URI=mongodb://db:27017/techdome
+    networks:
+      - techdome-network
+
+  frontend:
+    image: saif8957/techdome-frontend:latest
+    container_name: techdome-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - techdome-network
+
+  db:
+    image: mongo:latest
+    container_name: techdome-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - techdome-network
+
+networks:
+  techdome-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
